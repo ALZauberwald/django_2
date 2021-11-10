@@ -33,7 +33,7 @@ else :
 
 # pour heroku, ALLOWED_HOSTS doit être sous la forme : 'nomdelapp.herokuapp.com'
 # en local : '127.0.0.1'
-ALLOWED_HOSTS = ['al_zauberwald.herokuapp.com']
+ALLOWED_HOSTS = ['disquairedjango22.herokuapp.com']
 
 
 # Application definition
