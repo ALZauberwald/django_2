@@ -1,0 +1,20 @@
+{% extends 'store/base.html' %}
+{% block content %}
+{% if albums|length_is:"0" %}
+    <div class="text-center">
+      Mince ! Nous n'avons trouvé aucun résultat à la requête "{{query}}"! Reessayez!
+    </div>
+
+{% else %}
+    <div class="text-center">
+        Super ! Nous avons trouvé un résultat à la requête "{{query}}"
+        <br /> {{albums}}<br />
+        {% for album in albums %}
+        -<a href ="{% url 'store:detail' album_id=album.id %}">{{album}}</a><br />
+        {% endfor %}
+    </div>
+{% endif %}
+
+
+
+{% endblock %}

@@ -1,0 +1,49 @@
+{% include 'store/form_search.html' %}
+
+{% for album in albums %}
+    <div class="col-sm-4 text-center">
+        <!-- La méthode url prend en parametre le nom(eventuellement l'espace de nom juste avant)
+        puis les variables nécessaires à la création de l'url(album_id)-->
+        <a href="{% url 'store:detail' album_id=album.id %}">
+          <img class="img-responsive" src="{{ album.picture }}" alt="{{ album.title }}">
+        </a>
+        <!-- la variable album.title provient de index.html
+        elle a été donné à index.html par la vue définie par la fonction index dans views.py
+        la fonction render transmet en effet un dictionnaire de variable si on le lui renseigne en premier parametre
+
+        Ainsi:
+        dans views.py, la variable albums défini dans la fonction index est d'abord une liste d'objets de classe Album
+        Par contre ce n'est pas cette variable qui est transmise
+        c'est la clé 'albums' défini par context{ 'albums':albums} qui associe donc comme valeur les liste d'objet de classe Album à la clé 'albums'
+        ces objets possedent donc un titre qu'on récupère à travers une boucle for qu'on fait itérer sur la clé 'albums'
+        -->
+        <h3><a href="{% url 'store:detail' album_id=album.id %}">{{ album.title }}</a></h3>
+        {% for artist in album.artists.all %}
+            <p>{{ artist.name }}</p>
+        {% endfor %}
+    </div>
+
+    <!-- forloop.counter compte chaque tour de boucle
+    On ajoute des balises div avec la classe clearfix tous les 3 albums
+    c'est une classe spécifique du theme récupéré relatif a col-sm-4 une autre classe spécifique
+    -->
+    {% if forloop.counter|divisibleby:3 %}<div class="clearfix"></div>{% endif %}
+
+{% endfor %}
+
+<!-- Ajout d'un bouton précédent et d'un bouton suivant pour naviguer dans les pages ordonnées par paginator-->
+<!-- if paginate vérifie si paginate=True . Si c'est le cas elle tient compte du code
+ Ca permet de différencier dans quels cas afficher la navigation de paginator car album list est appelé dans plusieurs vues differentes-->
+{% if paginate %}
+  <div class="clearfix"></div>
+  <nav aria-label="...">
+    <ul class="pager">
+      {% if albums.has_previous %}
+          <li><a href="?page={{ albums.previous_page_number }}">Précédent</a></li>
+      {% endif %}
+      {% if albums.has_next %}
+          <li><a href="?page={{ albums.next_page_number }}">Suivant</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+{% endif %}

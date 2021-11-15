@@ -1,0 +1,42 @@
+{% extends 'store/base.html' %}
+{% block content %}
+
+Vous êtes sur la page de l'album : {{album_title}} !!
+<br /> {{album_title}} est interprété par : {{artists_name}}
+
+<div>
+  <img src="{{album_picture}}" alt="{{album_title}}"/>
+  <h2 class="text-center artist_name"> Réserver {{ album_title }}</h2>
+  <p style="margin-bottom: 20px;"> Nous pouvons mettre "<strong>{{ album_title.capitalize}}</strong>"
+    de côté et il ne vous restera plus qu'à venir le récupérer directement au magasin !</p>
+</div>
+
+<form class="form-inline" action="{% url 'store:detail' album_id=album_id %}" method="post">
+{% csrf_token %}
+   <div class="form-group  {% if form.name.errors %}has-warning has-feedback{% endif %}"> <!--ajoute du css en cas d'erreur (passe en rouge l'entrée)-->
+    <label for="{{ form.name.id_for_label }}" class="control-label">Nom</label>
+    {{ form.name }}
+  </div>
+  <div class="form-group  {% if form.email.errors %}has-warning has-feedback{% endif %}">
+    <label for=" {{form.email.id_for_label }}" class="control-label">E-mail</label>
+    {{ form.email }}
+  </div>
+  <!-- <input type="hidden" class="hidden" value="{{ album_id }}" name="album_id"> -->
+
+  <button type="submit" class="btn btn-success">Réserver</button>
+</form>
+
+<!-- gestion des erreurs-->
+
+{% if errors %}
+  <div>
+    {% for key, error in errors %}
+      <!-- la balise autoescape (de django)contrôle le comportement actuel de l’échappement automatique.( off ou on)-->
+      {% autoescape off%}
+        {{ error }}
+      {% endautoescape %}
+    {% endfor %}
+  </div>
+{% endif %}
+
+{% endblock %}
